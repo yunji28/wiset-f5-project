@@ -43,18 +43,13 @@ with st.sidebar:
     @st.dialog("이하은")
     def profile_haeun():
         st.image("image/임시.webp")
-        st.markdown("""
-            ### 정보
-            ### 역할
-            """)
+        st.write("이름: 이하은")
+
 
     @st.dialog("장희원")
     def profile_heewon():
         st.image("image/임시.webp")
-        st.markdown("""
-            ### 정보
-            ### 역할
-            """)
+        st.write("이름: 장희원")
 
     st.subheader("연구 책임자")
     if st.button("🐰 권보미"):
@@ -73,48 +68,50 @@ with st.sidebar:
         profile_heewon()
 
 
+st.header("「산업 안전 연구를 위한 물리적 제약을 고려한 텍스트 조건 휴머노이드 정적 자세 생성」")
+st.caption("WISET 여대학원생 공학연구팀제 숙명여자대학교 F5")
+
 # 탭
 t1, t2, t3, t4, t5 = st.tabs([
     '📖 연구 소개', '👩‍💻 진행 과정', '🕺연구 결과 시연', '🖼️활동 사진', '💬Review'
     ])
 with t1:
-    st.header("연구 소개")
-
+    st.subheader("텍스트 조건 휴머노이드 정적 자세 생성")
     st.markdown("""
-    ## Text-to-Pose란?
-
-    Text-to-Pose는 **자연어 문장을 입력하면 사람의 자세(Pose)를 생성하는 AI 기술**입니다.
-
+    해당 연구는 **자연어 문장을 입력하면 휴머노이드 로봇의 자세(Pose)를 생성하는 AI 기술**입니다.
+    
     예를 들어,
+    - "A robot is sitting on a chair."
+    - "A robot is raising one hand."
 
-    - "A person is sitting on a chair."
-    - "A person is raising one hand."
+    와 같은 문장을 입력하면 텍스트 조건부 확산 모델이 해당 내용을 분석하여 로봇의 자세를 생성합니다.
 
-    와 같은 문장을 입력하면 AI가 해당 내용을 이해하여 사람의 자세를 생성합니다.
     """)
-
-    st.markdown("""
-    ### 이번 연구에서는
-
-    기존에는 관절의 **좌표**를 직접 생성하는 방식이 많이 사용되었습니다.
-
-    이번 연구에서는 사람의 자세를 **관절의 각도**로 표현하여
-    더 자연스럽고 안정적인 자세를 생성하는 방법을 연구했습니다.
-    """)
+    st.subheader("전체 프레임워크")
+    st.image("image/임시.webp")
 
 with t2:
-    st.header("연구 과정")
-    st.write("연구 과정 작성")
+    st.subheader("연구 과정")
+    st.markdown("""
+    #### 데이터셋 구축
+    #### 모델 설계
+    #### 실험 및 결과 분석
+    """)
 
     st.divider()
+    
+    st.subheader("활동 내용")
+    st.markdown("""
+    #### 정기 회의 진행
+    #### KCC 2026 참가 (06.24~06.26)
+    #### 한국인공지능학술대회 KICS 논문 제출 (09.29~10.02)
+    """)
 
-    st.header("활동 내용")
-    st.write("활동 내용 작성")
 
 
 with t3:
     # 제목
-    st.header("Text-to-Pose Generation Demo")
+    st.subheader("Text-to-Pose Generation Demo")
     st.caption("영어 문장으로 자세를 설명하면 지정한 개수의 스켈레톤 포즈를 생성합니다.")
 
     # 입력
@@ -160,59 +157,64 @@ with t3:
                         st.error(f"에러 {r.status_code}: {r.text}")
 
 with t4:
-    st.caption("멘토링과 연구 활동 과정을 사진으로 확인할 수 있습니다.")
-    st.header("1차 멘토링 (26.05.30)")
-    col1, col2 = st.columns(2)
-    with col1:
-        st.image("image/임시.webp", caption="1차 멘토링 활동")
-
-    with col2:
-        st.image("image/임시.webp", caption="연구실 및 학교 견학")
-
-    st.header("2차 멘토링 (26.08.01)")
+    st.subheader("1차 멘토링 (26.05.30)")
+    st.caption("연구 소개 및 Python 기초 문법 학습")
     col1, col2, col3 = st.columns(3)
     with col1:
         st.image("image/임시.webp")
-
     with col2:
         st.image("image/임시.webp")
 
+    st.subheader("2차 멘토링 (26.08.01)")
+    st.caption("데이터 시각화 실습 및 결과 보고 웹페이지 구현")
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.image("image/임시.webp")
+    with col2:
+        st.image("image/임시.webp")
     with col3:
+        st.image("image/임시.webp")
+
+    st.subheader("3차 멘토링 (26.10.10)")
+    st.caption("연구 결과 분석 및 성과 공유")
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.image("image/임시.webp")
+    with col2:
         st.image("image/임시.webp")
 
 
 with t5:
-    st.header("💬 활동 후기")
     col1, col2, col3 = st.columns(3)
 
     with col1:
         with st.container(border=True):
-            st.subheader("🐰 권보미")
             st.markdown("""
+            #### 🐰 권보미
             ㅎㅎ
             """)
 
         with st.container(border=True):
-            st.subheader("🍀 이하은")
             st.markdown("""
+            #### 🍀 이하은
             ㅎㅎ
             """)
 
     with col2:
         with st.container(border=True):
-            st.subheader("🐱 박세은")
             st.markdown("""
+            #### 🐱 박세은
             ㅎㅎ
             """)
         with st.container(border=True):
-            st.subheader("🍒 장희원")
             st.markdown("""
+            #### 🍒 장희원
             ㅎㅎ
             """)
 
     with col3:
         with st.container(border=True):
-            st.subheader("👻 박윤지")
             st.markdown("""
+            #### 👻 박윤지
             ㅎㅎ
             """)
