@@ -68,7 +68,7 @@ with st.sidebar:
         profile_heewon()
 
 
-st.header("「산업 안전 연구를 위한 물리적 제약을 고려한 텍스트 조건 휴머노이드 정적 자세 생성」")
+st.header("산업 안전 연구를 위한 물리적 제약을 고려한 텍스트 조건 휴머노이드 정적 자세 생성")
 st.caption("WISET 여대학원생 공학연구팀제 숙명여자대학교 F5")
 
 # 탭
@@ -110,16 +110,30 @@ with t2:
 
 
 with t3:
+    API_URL = st.secrets.get("API_URL", "http://localhost:8001")
+    API_KEY = st.secrets.get("API_KEY", "change-me")
+    HEADERS = {"X-API-Key": API_KEY, "ngrok-skip-browser-warning": "true"}
+
+    EXAMPLES = [
+        "A humanoid robot stands in a wide stance, with the left arm raised and bent at the elbow and the right arm stretched out to the side.",
+        "A humanoid robot stands with the feet together, with both arms stretched fully overhead.",
+        "A humanoid robot stands with feet about shoulder-width apart, with the left arm extended forward and the right arm hanging straight down.",
+        "A humanoid robot stands in a wide stance, with both arms stretched out to the side at shoulder level.",
+    ]
+    
     # 제목
-    st.subheader("Text-to-Pose Generation Demo")
-    st.caption("영어 문장으로 자세를 설명하면 지정한 개수의 스켈레톤 포즈를 생성합니다.")
+    st.subheader("Text → 휴머노이드 로봇 자세 생성 데모")
+    st.caption("영어 문장으로 자세를 설명하면 Unitree G1 로봇 자세를 생성해 정면·측면으로 보여줍니다.")
+
+    # 입력 예시
+    with st.expander("예시 문장 (클릭해서 복사)"):
+        for e in EXAMPLES:
+            st.code(e, language=None)
+    st.caption("팔 높이(down / side / forward / raised / overhead), 팔꿈치(bent / straight), "
+               "발 간격(feet together / shoulder-width / wide)을 직접 말하는 문장이 잘 됩니다.")
 
     # 입력
-    prompt = st.text_input("포즈 설명 (영어)", placeholder="A person is sitting on a chair.")
-    n = st.slider("생성 개수", 1, 8, 5)
-
-    API_URL = st.secrets.get("API_URL", "http://localhost:8000")
-    API_KEY = st.secrets.get("API_KEY", "change-me")
+    prompt = st.text_input("자세 설명 (영어)", EXAMPLES[0])
 
     # 생성 버튼
     if st.button("생성", type="primary"):
@@ -129,28 +143,25 @@ with t3:
         # 정상적으로 입력이 된 경우
         else:
             # 포즈를 생성하는 동안 spinner 작동
-            with st.spinner("모델 실행 중..."):
+            with st.spinner("모델 실행 중... (약 3~5초)"):
                 try:
-                    r = requests.post(      # requests.post() : 서버에게 데이터를 보내는 함수
-                        f"{API_URL}/generate",
-                        json={"text": prompt, "n_samples": n},
-                        headers={"X-API-Key": API_KEY},
-                        timeout=180,        # 최대 3분 기다림
-                    )
+                    r = requests.post(f"{API_URL}/generate", json={"text": prompt},
+                                    headers=HEADERS, timeout=180)
                 except requests.exceptions.RequestException as e:
                     st.error(f"서버 연결 실패: {e}")
-                # 서버가 정상적으로 응답한 경우
                 else:
-                    if r.status_code == 200:        # 성공
-                        # st.image(r.content, use_container_width=True)
-                        # 사진 크기 조절
-                        img = Image.open(io.BytesIO(r.content))
-                        target_height = 250
-                        w, h = img.size
-                        new_w = int(w * target_height / h)
-                        img = img.resize((new_w, target_height))
-                        st.image(img)
-                        st.success(f"분류 결과: **{r.headers.get('X-Pose-Class', '?')}**")
+                    if r.status_code == 200:
+                        img, perform = st.columns([3,2])
+                        with img:
+                            st.image(r.content, use_container_width=True)
+                        with perform:
+                            with st.container(border=True):
+                                c1, c2, c3 = st.columns(3)
+                                c1.metric("지시 이행", r.headers.get("X-Compliance", "?"))
+                                c2.metric("관절 한계 위반", "0" if r.headers.get("X-Limit-Violation", "0.0") == "0.0" else "있음")
+                                pen = float(r.headers.get("X-Penetration-mm", "0"))
+                                c3.metric("자기 충돌", "없음" if pen <= 5 else f"{pen:.1f} mm 관통")
+                                st.caption(f"측정된 자세 속성: `{r.headers.get('X-Posecode', '?')}`")
                     elif r.status_code == 401:
                         st.error("API 키가 틀렸습니다. 담당자에게 키를 확인하세요.")
                     else:

@@ -1,2 +1,5 @@
 # Streamlit secrets
 .streamlit/
+
+# API 사용법
+README_API.md
