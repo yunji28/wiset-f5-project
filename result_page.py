@@ -1,10 +1,6 @@
 import requests
 import streamlit as st
 
-# 사진 크기 조절을 위한 라이브러리~
-from PIL import Image
-import io
-
 # 페이지 세팅
 st.set_page_config(
     page_title="WISET F5 연구 페이지",
@@ -44,12 +40,18 @@ with st.sidebar:
     def profile_haeun():
         st.image("image/임시.webp")
         st.write("이름: 이하은")
+        st.write("학교: 채드윅 국제학교")
+        st.write("생년월일: 2010년 10월 1일")
+        st.write("MBTI: INTP")
 
 
     @st.dialog("장희원")
     def profile_heewon():
         st.image("image/임시.webp")
         st.write("이름: 장희원")
+        st.write("학교: 민족사관고등학교")
+        st.write("생년월일: 2010.04.08")
+        st.write("MBTI: ESTJ")
 
     st.subheader("연구 책임자")
     if st.button("🐰 권보미"):
@@ -72,8 +74,8 @@ st.header("산업 안전 연구를 위한 물리적 제약을 고려한 텍스�
 st.caption("WISET 여대학원생 공학연구팀제 숙명여자대학교 F5")
 
 # 탭
-t1, t2, t3, t4, t5 = st.tabs([
-    '📖 연구 소개', '👩‍💻 진행 과정', '🕺연구 결과 시연', '🖼️활동 사진', '💬Review'
+t1, t2, t3, t4, t5, t6 = st.tabs([
+    '📖 연구 소개', '👩‍💻 연구 과정', '🕺결과 시연', '🧪 연구 활동 ', '🖼️멘토링', '💬Review'
     ])
 with t1:
     st.subheader("텍스트 조건 휴머노이드 정적 자세 생성")
@@ -93,8 +95,7 @@ with t1:
             st.image("./image/프레임워크.png")
 
 with t2:
-    st.subheader("연구 과정")
-    st.markdown("#### 데이터셋 구축")
+    st.subheader("데이터셋 구축")
     c1, c2, c3, c4, c5 = st.columns(5)
     with c1:
         with st.container():
@@ -130,10 +131,8 @@ with t2:
             → 87,296 고유 텍스트 캡션
             """)            
     
-    st.markdown("""
-    #### 모델 설계
-    성질이 다른 로봇의 두 물리적 제약을 두 단계로 나눠 처리했습니다.
-    """)
+    st.subheader("모델 설계")
+    st.text("성질이 다른 로봇의 두 물리적 제약을 두 단계로 나눠 처리했습니다.")
     col1, col2 = st.columns(2)
     with col1:
         with st.container(border=True):
@@ -143,8 +142,7 @@ with t2:
             - $u$: 확산이 다루는 무제약 변수
             - $l$, $h$ : 관절 하한, 상한
             - $\sigma$ : sigmoid
-            """)
-            
+            """)   
     with col2:
         with st.container(border=True):
             st.markdown("**자기 충돌 : 역확산에서 guidance로 완화**")
@@ -155,16 +153,7 @@ with t2:
             - $s$: 가중치 16
             """)
 
-    st.markdown("#### 실험 및 결과 분석")
-
-    st.divider()
-    
-    st.subheader("활동 내용")
-    st.markdown("""
-    #### 정기 회의 진행
-    #### KCC 2026 참가 (06.24~06.26)
-    #### 한국인공지능학술대회 KICS 논문 제출 (09.29~10.02)
-    """)
+    st.subheader("실험 및 결과 분석")
 
 
 
@@ -192,7 +181,7 @@ with t3:
                "발 간격(feet together / shoulder-width / wide)을 직접 말하는 문장이 잘 됩니다.")
 
     # 입력
-    prompt = st.text_input("자세 설명 (영어)", EXAMPLES[0])
+    prompt = st.text_input("자세 설명 (영어)", placeholder=EXAMPLES[0])
 
     # 생성 버튼
     if st.button("생성", type="primary"):
@@ -225,8 +214,14 @@ with t3:
                         st.error("API 키가 틀렸습니다. 담당자에게 키를 확인하세요.")
                     else:
                         st.error(f"에러 {r.status_code}: {r.text}")
-
 with t4:
+    st.subheader("정기 회의 진행")
+    st.subheader("연구 진행 상황 공유")
+    st.subheader("KCC 2026 참가 (06.24~06.26)")
+    st.subheader("한국인공지능학술대회 KICS 논문 제출 (09.29~10.02) 및 발표")
+    
+
+with t5:
     st.subheader("1차 멘토링 (26.05.30)")
     st.caption("연구 소개 및 Python 기초 문법 학습")
     col1, col2, col3 = st.columns(3)
@@ -254,7 +249,7 @@ with t4:
         st.image("image/임시.webp")
 
 
-with t5:
+with t6:
     col1, col2, col3 = st.columns(3)
 
     with col1:
