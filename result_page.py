@@ -1,11 +1,52 @@
 import requests
 import streamlit as st
 import pandas as pd
+from itertools import count
+from pathlib import Path
+
+BASE_DIR = Path(__file__).parent
+_grid_id = count()
 
 # 설정 및 데이터
 st.set_page_config(page_title="WISET F5 연구 페이지", page_icon="🕺", layout="wide")
 st.markdown(
-    "<style>[data-testid='stDecoration'] { display: none; }</style>",
+    """
+    <style>
+    [data-testid="stDecoration"] { display: none; }
+
+    /* 표가 화면보다 넓으면 가로 스크롤 */
+    [data-testid="stTable"] { overflow-x: auto; }
+
+    @media (max-width: 640px) {
+        /* 여백 줄이기 */
+        .block-container { padding: 4rem 0.8rem 3rem !important; }
+
+        /* 제목/캡션 크기 */
+        h1 { font-size: 1.5rem !important; }
+        h2 { font-size: 1.3rem !important; line-height: 1.35 !important; }
+        h3 { font-size: 1.1rem !important; }
+
+        /* 탭: 글자·간격 줄이고 가로 스크롤 */
+        button[data-baseweb="tab"] { padding: 0.4rem 0.6rem !important; }
+        button[data-baseweb="tab"] p { font-size: 0.85rem !important; }
+
+        /* 표 글자 작게 */
+        [data-testid="stTable"] table { font-size: 0.75rem; }
+
+        /* 이미지 그리드만 2열 유지 (show_images에서 key로 표시한 영역) */
+        [class*="st-key-imggrid"] [data-testid="stHorizontalBlock"] {
+            flex-wrap: wrap !important;
+            gap: 0.5rem !important;
+        }
+        [class*="st-key-imggrid"] [data-testid="stColumn"],
+        [class*="st-key-imggrid"] [data-testid="column"] {
+            flex: 1 1 calc(50% - 0.5rem) !important;
+            min-width: calc(50% - 0.5rem) !important;
+            width: calc(50% - 0.5rem) !important;
+        }
+    }
+    </style>
+    """,
     unsafe_allow_html=True,
 )
 
@@ -31,8 +72,6 @@ MENTORING = [
      [f"./image/mentoring/1차멘토링{i}.jpg" for i in range(1, 5)]),
     ("2차 멘토링 (26.08.01)", "데이터 시각화 실습 및 결과 보고 웹페이지 구현",
      [f"./image/mentoring/2차멘토링{i}.jpg" for i in range(1, 5)]),
-    ("3차 멘토링 (26.10.10)", "연구 결과 분석 및 성과 공유",
-     [DEFAULT_IMG, DEFAULT_IMG]),
 ]
 
 EXAMPLES = [
@@ -66,10 +105,15 @@ RESULT_2 = {
 
 # 공통 레이아웃
 def show_images(paths, n_cols=4):
-    """이미지 경로 리스트를 n_cols 열 그리드로 표시"""
-    cols = st.columns(n_cols)
-    for col, path in zip(cols, paths):
-        col.image(path)
+    """이미지 경로 리스트를 n_cols 열 그리드로 표시 (모바일에서는 2열)"""
+    with st.container(key=f"imggrid-{next(_grid_id)}"):
+        cols = st.columns(n_cols)
+        for col, path in zip(cols, paths):
+            p = BASE_DIR / path
+            if p.exists():
+                col.image(str(p), use_container_width=True)
+            else:
+                col.warning(f"이미지 없음: {path}")
 
 @st.dialog("프로필")
 def show_profile(p):
