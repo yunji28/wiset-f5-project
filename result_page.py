@@ -17,6 +17,15 @@ st.markdown(
     /* 표가 화면보다 넓으면 가로 스크롤 */
     [data-testid="stTable"] { overflow-x: auto; }
 
+    /* 프로필 다이얼로그 사진: 모두 같은 크기, 가운데 정렬 */
+    [data-testid="stDialog"] [data-testid="stImage"] img {
+        width: 209px !important;
+        height: 261px !important;
+        object-fit: cover;        /* 비율이 다르면 가장자리를 잘라서 채움 */
+        object-position: top;     /* 얼굴이 위쪽이니 위를 기준으로 자름 */
+        border-radius: 12px;
+    }
+
     @media (max-width: 640px) {
         /* 여백 줄이기 */
         .block-container { padding: 4rem 0.8rem 3rem !important; }
@@ -54,16 +63,22 @@ DEFAULT_IMG = "image/임시.webp"
 
 TEAM = {
     "연구 책임자": [
-        dict(emoji="🐰", name="권보미", org="숙명여자대학교", birth="2001.??.??", mbti="ENFP..?"),
-    ],
+        dict(emoji="🐰", name="권보미", org="숙명여자대학교",
+             role="연구 기획, 운영 / 예산 총괄 / 생성 모델 설계 및 실험 총괄",
+             birth="2001.??.??", mbti="ENFP..?"),],
     "연구 팀원": [
-        dict(emoji="🐱", name="박세은", org="숙명여자대학교", birth="2005.09.16", mbti="ISTP?"),
-        dict(emoji="👻", name="박윤지", org="숙명여자대학교", birth="2005.12.28", mbti="INFP",
-             img="image/profile/박윤지.jpg", center_img=True),
+        dict(emoji="🐱", name="박세은", org="숙명여자대학교",
+             role="자세 데이터셋 구축 및 전처리 / 1차 멘토링 주관",
+             birth="2005.09.16", mbti="INTP", img="image/profile/박세은.png"),
+        dict(emoji="👻", name="박윤지", org="숙명여자대학교",
+             role="평가 검증 및 비교 실험 / 2차 멘토링 주관",
+             birth="2005.12.28", mbti="INFP", img="image/profile/박윤지.jpg"),
     ],
     "중고등학생 팀원": [
-        dict(emoji="🍀", name="이하은", org="채드윅국제학교", birth="2010.10.01", mbti="INTP"),
-        dict(emoji="🍒", name="장희원", org="민족사관고등학교", birth="2010.04.08", mbti="ESTJ"),
+        dict(emoji="🍀", name="이하은", org="채드윅국제학교",
+             role="생성 결과 분석 / 연구 결과 시각화 / 웹페이지 구현", birth="2010.10.01", mbti="INTP"),
+        dict(emoji="🍒", name="장희원", org="민족사관고등학교",
+             role="생성 결과 분석 / 연구 결과 시각화 / 웹페이지 구현", birth="2010.04.08", mbti="ESTJ"),
     ],
 }
 
@@ -117,13 +132,10 @@ def show_images(paths, n_cols=4):
 
 @st.dialog("프로필")
 def show_profile(p):
-    img = p.get("img", DEFAULT_IMG)
-    if p.get("center_img"):
-        st.columns([1, 2, 1])[1].image(img)
-    else:
-        st.image(img)
+    st.image(str(BASE_DIR / p.get("img", DEFAULT_IMG)))
     st.write(f"이름: {p['name']}")
     st.write(f"소속: {p['org']}")
+    st.write(f"역할: {p['role']}")
     st.write(f"생년월일: {p['birth']}")
     st.write(f"MBTI: {p['mbti']}")
 
