@@ -65,20 +65,27 @@ TEAM = {
     "연구 책임자": [
         dict(emoji="🐰", name="권보미", org="숙명여자대학교",
              role="연구 기획, 운영 / 예산 총괄 / 생성 모델 설계 및 실험 총괄",
-             birth="2001.??.??", mbti="ENFP..?"),],
+             birth="2001.??.??", mbti="ENFP..?",
+             review="ㅎㅎ"),],
     "연구 팀원": [
         dict(emoji="🐱", name="박세은", org="숙명여자대학교",
              role="자세 데이터셋 구축 및 전처리 / 1차 멘토링 주관",
-             birth="2005.09.16", mbti="INTP", img="image/profile/박세은.png"),
+             birth="2005.09.16", mbti="INTP", img="image/profile/박세은.png",
+             review="팀원들과 함께 연구를 처음부터 끝까지 진행하며, 데이터를 준비하는 과정이 결과만큼 중요하다는 것을 배웠습니다. 또한 멘토링을 통해 제가 아는 내용을 다른 사람에게 쉽게 전달하는 일이 생각보다 어렵지만 보람 있다는 것을 느꼈습니다. 이렇듯 다같이 연구를 해보고 함께 나눈 이 경험이 앞으로의 연구 생활에 큰 도움이 될것같습니다!"),
         dict(emoji="👻", name="박윤지", org="숙명여자대학교",
              role="평가 검증 및 비교 실험 / 2차 멘토링 주관",
-             birth="2005.12.28", mbti="INFP", img="image/profile/박윤지.jpg"),
+             birth="2005.12.28", mbti="INFP", img="image/profile/박윤지.jpg",
+             review="컴퓨터과학전공 특성상 학부생 때 연구를 직접 경험할 기회가 많지 않은데, 여대학원생 공학연구팀제를 통해 팀원들과 함께 하나의 연구를 진행할 수 있어 뜻깊었습니다. 특히 직접 데이터를 다루고 생성 모델을 연구하며 AI 분야에 흥미를 갖게 되었고, 멘토링을 통해 지식을 나누는 보람도 느꼈습니다. 연구 경험을 쌓는 것을 넘어, 진로에 대한 새로운 가능성을 발견할 수 있었던 소중한 시간이었습니다."),
     ],
     "중고등학생 팀원": [
         dict(emoji="🍀", name="이하은", org="채드윅국제학교",
-             role="생성 결과 분석 / 연구 결과 시각화 / 웹페이지 구현", birth="2010.10.01", mbti="INTP"),
+             role="생성 결과 분석 / 연구 결과 시각화 / 웹페이지 구현",
+             birth="2010.10.01", mbti="INTP",
+             review="ㅎㅎ"),
         dict(emoji="🍒", name="장희원", org="민족사관고등학교",
-             role="생성 결과 분석 / 연구 결과 시각화 / 웹페이지 구현", birth="2010.04.08", mbti="ESTJ"),
+             role="생성 결과 분석 / 연구 결과 시각화 / 웹페이지 구현",
+             birth="2010.04.08", mbti="ESTJ",
+             review="ㅎㅎ"),
     ],
 }
 
@@ -283,7 +290,7 @@ def render_review():
     cols = st.columns(3)
     for i, p in enumerate(members):
         with cols[i % 3], st.container(border=True):
-            st.markdown(f"#### {p['emoji']} {p['name']}\nㅎㅎ")
+            st.markdown(f"#### {p['emoji']} {p['name']}\n{p['review']}")
 
 
 # 메인
