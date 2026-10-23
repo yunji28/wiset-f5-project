@@ -8,6 +8,15 @@ st.set_page_config(
     layout="wide"       # 레이아웃을 전체로 설정
 )
 
+st.markdown(
+    """
+    <style>
+    [data-testid="stDecoration"] { display: none; }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 # 사이드바
 with st.sidebar:
     st.title("👥 팀원 소개")
