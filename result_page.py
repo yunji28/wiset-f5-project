@@ -78,25 +78,84 @@ t1, t2, t3, t4, t5 = st.tabs([
 with t1:
     st.subheader("텍스트 조건 휴머노이드 정적 자세 생성")
     st.markdown("""
-    해당 연구는 **자연어 문장을 입력하면 휴머노이드 로봇의 자세(Pose)를 생성하는 AI 기술**입니다.
+    본 연구는 **자연어 문장을 입력하면 휴머노이드 로봇의 자세(Pose)를 생성 기술** 연구입니다.
     
     예를 들어,
-    - "A robot is sitting on a chair."
-    - "A robot is raising one hand."
+    - "A humanoid robot stands with Left arm stretched fully overhead."
+    - "A humanoid robot is raising right hand."
 
-    와 같은 문장을 입력하면 텍스트 조건부 확산 모델이 해당 내용을 분석하여 로봇의 자세를 생성합니다.
-
+    와 같은 문장을 입력하면 텍스트 조건부 확산 모델이 해당 문장을 분석하여 로봇의 자세를 생성합니다.
     """)
+    
     st.subheader("전체 프레임워크")
-    st.image("image/임시.webp")
+    c1, c2 = st.columns([2,1])
+    with c1:
+            st.image("./image/프레임워크.png")
 
 with t2:
     st.subheader("연구 과정")
+    st.markdown("#### 데이터셋 구축")
+    c1, c2, c3, c4, c5 = st.columns(5)
+    with c1:
+        with st.container():
+            st.markdown("""
+            >  **1. AMASS**   
+            : CMU, DanceDB 2,235개 시퀀스 사용
+            """)
+    with c2:
+        with st.container():
+            st.markdown("""
+            > **2. 자세 샘플링**   
+            : 직립 제약 없이 35,628개 후보 확보
+            """)
+    with c3:
+        with st.container():
+            st.markdown("""
+            > **3. 리타겟팅**   
+            : 뼈 방향 정합 최적화를 사용   
+            (평균 오차 3.30°)
+            """)
+    with c4:
+        with st.container():
+            st.markdown("""
+            > **4. 충돌 필터링**   
+            : MuJoCo 관통 5mm 초과 56.6% 제외   
+            → 15,458 최종 G1 자세
+            """)
+    with c5:
+        with st.container():
+            st.markdown("""
+            > **5. 캡션**   
+            : G1 자세에서 기하 특징 재측정  
+            → 87,296 고유 텍스트 캡션
+            """)            
+    
     st.markdown("""
-    #### 데이터셋 구축
     #### 모델 설계
-    #### 실험 및 결과 분석
+    성질이 다른 로봇의 두 물리적 제약을 두 단계로 나눠 처리했습니다.
     """)
+    col1, col2 = st.columns(2)
+    with col1:
+        with st.container(border=True):
+            st.markdown("**관절 범위 : 출력 파라미터에 내재화**")
+            st.latex(r"q_i = l_i + (h_i - l_i) \cdot \sigma(u_i)")
+            st.markdown("""
+            - $u$: 확산이 다루는 무제약 변수
+            - $l$, $h$ : 관절 하한, 상한
+            - $\sigma$ : sigmoid
+            """)
+            
+    with col2:
+        with st.container(border=True):
+            st.markdown("**자기 충돌 : 역확산에서 guidance로 완화**")
+            st.latex(r"E = s \cdot \sum \operatorname{ReLU}\left(f(q_{1:29}) + m\right)")
+            st.markdown("""
+            - $f$: 링크 간 관통량 예측 MLP
+            - $m$: 기하 여유 5mm
+            - $s$: 가중치 16
+            """)
+
+    st.markdown("#### 실험 및 결과 분석")
 
     st.divider()
     
